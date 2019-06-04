@@ -1,0 +1,10 @@
+*.pyc
+logs/*
+venv*
+static_root
+media
+work
+database.db
+*.sqlite3
+.idea
+*.bak
