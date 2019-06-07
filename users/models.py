@@ -5,6 +5,8 @@ from django.contrib.auth.models import BaseUserManager, UserManager, AbstractBas
 from django.utils.translation import ugettext_lazy as _
 from django.utils import six, timezone
 
+from rest_framework.authentication import TokenAuthentication
+
 from phonenumber_field.modelfields import PhoneNumberField
 
 
@@ -150,3 +152,8 @@ class User(AbstractBaseUser):
         if self.deleted == None:
             return False
         return self.deleted and (timezone.now() - self.deleted).total_seconds() < settings.ACCOUNT_DELETE_GRACE_DAYS * 86400
+
+
+class BearerTokenAuthentication(TokenAuthentication):
+
+    keyword = 'Bearer'

@@ -38,11 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'rest_framework',
+    'rest_framework.authtoken',
+
     'phonenumber_field',
 
     'users',
     'products',
     'orders',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -131,3 +135,13 @@ MEDIA_ROOT = ''
 
 
 AUTH_USER_MODEL = 'users.User'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # 'users.models.BearerTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # 'rest_framework.permissions.IsAuthenticated',
+    )
+}
