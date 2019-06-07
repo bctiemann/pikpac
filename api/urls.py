@@ -9,6 +9,7 @@ from api import views
 
 router = routers.DefaultRouter()
 router.register('products', views.ProductViewSet, basename='product')
+router.register('projects', views.ProjectViewSet, basename='project')
 # router.register(r'pieces', views.PieceViewSet, basename='piece')
 # router.register(r'parts', views.PartViewSet, basename='part')
 # router.register(r'program_pieces', views.ProgramPieceViewSet, basename='program_piece')
