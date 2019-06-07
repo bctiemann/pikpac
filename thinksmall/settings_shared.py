@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
     'phonenumber_field',
 
-    'users',
+    'accounts',
     'products',
     'orders',
     'api',
@@ -134,7 +134,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = ''
 
 
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 REST_FRAMEWORK = {

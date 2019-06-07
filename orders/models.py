@@ -11,7 +11,7 @@ def get_design_path(instance, filename):
 
 class Project(models.Model):
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
-    user = models.ForeignKey('users.User', null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(blank=True)
     unit_price = models.DecimalField(max_digits=9, decimal_places=2)
@@ -21,7 +21,7 @@ class Project(models.Model):
 
 
 class Design(models.Model):
-    user = models.ForeignKey('users.User', null=True, blank=True, on_delete=models.SET_NULL)
+    user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL, related_name='designs')
     date_created = models.DateTimeField(auto_now_add=True)
     template = models.ForeignKey('products.Template', null=True, blank=True, on_delete=models.SET_NULL)
