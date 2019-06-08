@@ -1,4 +1,8 @@
 from django.shortcuts import render
+from django.utils import timezone
+from django.contrib.auth import (
+    login, logout, authenticate, get_user_model, password_validation,
+)
 
 from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView
@@ -13,6 +17,7 @@ from rest_framework.decorators import action
 from products.models import Product
 from orders.models import Project
 from . import serializers
+
 
 class LoginView(APIView):
 

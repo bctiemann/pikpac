@@ -40,8 +40,8 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework.authtoken',
-
     'phonenumber_field',
+    'corsheaders',
 
     'accounts',
     'products',
@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -137,11 +138,15 @@ MEDIA_ROOT = ''
 AUTH_USER_MODEL = 'accounts.User'
 
 
+# CORS header configuration
+CORS_ORIGIN_ALLOW_ALL = True
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'users.models.BearerTokenAuthentication',
+        'accounts.models.BearerTokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     )
 }
