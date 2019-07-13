@@ -14,7 +14,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
-from products.models import ProductCategory, Product
+from products.models import ProductCategory, Product, ProductPrice
 from orders.models import Project
 from . import serializers, filters
 
@@ -97,13 +97,19 @@ class ProductCategoryViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
-    # category = serializers.ProductCategorySerializer
     serializer_class = serializers.ProductSerializer
-    # filterset_fields = ('category__slug',)
     filter_class = filters.ProductFilter
 
     def get_queryset(self):
         return Product.objects.all()
+
+    @action(detail=True, methods=['post'])
+    def price(self, request, pk=None):
+        product = self.get_object()
+
+        product_price = ProductPrice.objects.get(product=product, quantity=request.data['quantity'])
+
+        return Response({'price': product_price.unit_price})
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

@@ -49,6 +49,15 @@ class Product(models.Model):
         return self.name
 
 
+class ProductPrice(models.Model):
+    product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL, related_name='prices')
+    quantity = models.IntegerField(null=True, blank=True)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+
+    class Meta:
+        ordering = ('quantity',)
+
+
 class Template(models.Model):
     TYPE_CHOICES = (
         ('preset', 'Preset',),

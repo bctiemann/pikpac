@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from products.models import ProductCategory, Product
+from products.models import ProductCategory, Product, ProductPrice
 from orders.models import Project
 
 
@@ -15,9 +15,22 @@ class ProductCategorySerializer(serializers.ModelSerializer):
             'picture',
         )
 
+
+class ProductPriceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ProductPrice
+        fields = (
+            'product',
+            'quantity',
+            'unit_price',
+        )
+
+
 class ProductSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer()
     collapsibility = serializers.CharField(source='get_collapsibility_display')
+    prices = ProductPriceSerializer(many=True)
 
     class Meta:
         model = Product
@@ -29,6 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'pieces',
             'collapsibility',
             'picture',
+            'prices',
         )
 
 

@@ -17,6 +17,13 @@ class ProductAdmin(admin.ModelAdmin):
 admin.site.register(models.Product, ProductAdmin)
 
 
+class ProductPriceAdmin(admin.ModelAdmin):
+    list_display = ('product', 'quantity', 'unit_price',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.ProductPrice, ProductPriceAdmin)
+
+
 class TemplateAdmin(admin.ModelAdmin):
     list_display = ('id',)
     list_filter = ()
