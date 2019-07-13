@@ -14,17 +14,36 @@ def get_template_path(instance, filename):
     return 'templates/{0}'.format(filename)
 
 
-class Product(models.Model):
-    CATEGORY_CHOICES = (
-        ('rigid', 'Rigid Boxes',),
-        ('setup', 'Setup Boxes',),
-    )
-
-    name = models.CharField(max_length=200, blank=True)
-    category = models.CharField(choices=CATEGORY_CHOICES, default=CATEGORY_CHOICES[0][0], max_length=40)
+class ProductCategory(models.Model):
+    slug = models.CharField(max_length=40, blank=True)
+    name = models.CharField(max_length=40, blank=True)
+    sort_order = models.IntegerField(null=True, blank=True)
     picture = models.ImageField(blank=True, width_field='picture_width', height_field='picture_height', upload_to=get_product_image_path)
     picture_width = models.IntegerField(null=True, blank=True)
     picture_height = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ('sort_order',)
+        verbose_name_plural = 'product categories'
+
+
+class Product(models.Model):
+    COLLAPSIBILITY_CHOICES = (
+        ('c', 'Collapsible'),
+        ('nc', 'Non-collapsible'),
+    )
+
+    category = models.ForeignKey('products.ProductCategory', null=True, blank=True, on_delete=models.SET_NULL)
+    sku = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+    picture = models.ImageField(blank=True, width_field='picture_width', height_field='picture_height', upload_to=get_product_image_path)
+    picture_width = models.IntegerField(null=True, blank=True)
+    picture_height = models.IntegerField(null=True, blank=True)
+    pieces = models.IntegerField(null=True, blank=True)
+    collapsibility = models.CharField(choices=COLLAPSIBILITY_CHOICES, default=COLLAPSIBILITY_CHOICES[0][0], max_length=10)
 
     def __str__(self):
         return self.name

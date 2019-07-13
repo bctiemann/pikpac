@@ -14,9 +14,9 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
-from products.models import Product
+from products.models import ProductCategory, Product
 from orders.models import Project
-from . import serializers
+from . import serializers, filters
 
 
 class LoginView(APIView):
@@ -88,16 +88,25 @@ class MeView(APIView):
         return Response(response)
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductCategoryViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ProductCategorySerializer
+    lookup_field = 'slug'
 
+    def get_queryset(self):
+        return ProductCategory.objects.all()
+
+
+class ProductViewSet(viewsets.ModelViewSet):
+    # category = serializers.ProductCategorySerializer
     serializer_class = serializers.ProductSerializer
+    # filterset_fields = ('category__slug',)
+    filter_class = filters.ProductFilter
 
     def get_queryset(self):
         return Product.objects.all()
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
