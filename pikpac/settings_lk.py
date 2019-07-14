@@ -6,17 +6,17 @@ except ImportError:
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'api.pikpac.grotto11.com']
 
-STATIC_ROOT = '/Users/brian.tiemann/Development/thinksmall/static_root'
+STATIC_ROOT = '/usr/local/www/django/pikpac/static_root'
 
-MEDIA_ROOT = '/Users/brian.tiemann/Development/thinksmall/media'
+MEDIA_ROOT = '/usr/local/www/django/pikpac/media'
 
 CELERY_TASK_ALWAYS_EAGER = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-SITE_EMAIL = 'info@thinksmall.com'
+SITE_EMAIL = 'info@pikpac.com'
 DEBUG_EMAIL = 'btman@mac.com'
 ADMIN_EMAIL = 'btman@mac.com'
 
