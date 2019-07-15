@@ -89,6 +89,10 @@ class MeView(APIView):
 
 
 class ProductCategoryViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+
     serializer_class = serializers.ProductCategorySerializer
     lookup_field = 'slug'
 
@@ -97,6 +101,10 @@ class ProductCategoryViewSet(viewsets.ModelViewSet):
 
 
 class ProductViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+
     serializer_class = serializers.ProductSerializer
     filter_class = filters.ProductFilter
 
