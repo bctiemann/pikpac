@@ -115,7 +115,10 @@ class ProductViewSet(viewsets.ModelViewSet):
     def price(self, request, pk=None):
         product = self.get_object()
 
-        product_price = ProductPrice.objects.get(product=product, quantity=request.data['quantity'])
+        try:
+            product_price = ProductPrice.objects.get(product=product, quantity=request.data['quantity'])
+        except ProductPrice.DoesNotExist:
+            return Response({'price': 0})
 
         return Response({'price': product_price.unit_price})
 
