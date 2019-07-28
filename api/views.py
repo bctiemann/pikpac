@@ -14,7 +14,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
-from products.models import ProductCategory, Product, ProductPrice
+from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project
 from . import serializers, filters
 
@@ -121,6 +121,30 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response({'price': 0})
 
         return Response({'price': product_price.unit_price})
+
+
+class PatternViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    serializer_class = serializers.PatternSerializer
+    # filter_class = filters.ProductFilter
+
+    def get_queryset(self):
+        return Pattern.objects.all()
+
+
+class PaperViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    serializer_class = serializers.PaperSerializer
+    # filter_class = filters.ProductFilter
+
+    def get_queryset(self):
+        return Paper.objects.all()
 
 
 class ProjectViewSet(viewsets.ModelViewSet):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from products.models import ProductCategory, Product, ProductPrice
+from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project
 
 
@@ -43,6 +43,30 @@ class ProductSerializer(serializers.ModelSerializer):
             'collapsibility',
             'picture',
             'prices',
+        )
+
+
+class PatternSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pattern
+        fields = (
+            'id',
+            'name',
+            'sku',
+            'picture',
+        )
+
+
+class PaperSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Paper
+        fields = (
+            'id',
+            'name',
+            'sku',
+            'picture',
         )
 
 

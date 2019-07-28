@@ -10,6 +10,8 @@ from api import views
 router = routers.DefaultRouter()
 router.register('categories', views.ProductCategoryViewSet, basename='category')
 router.register('products', views.ProductViewSet, basename='product')
+router.register('patterns', views.PatternViewSet, basename='pattern')
+router.register('papers', views.PaperViewSet, basename='paper')
 router.register('projects', views.ProjectViewSet, basename='project')
 # router.register(r'pieces', views.PieceViewSet, basename='piece')
 # router.register(r'parts', views.PartViewSet, basename='part')

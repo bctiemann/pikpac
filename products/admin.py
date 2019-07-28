@@ -29,3 +29,17 @@ class TemplateAdmin(admin.ModelAdmin):
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.Template, TemplateAdmin)
+
+
+class PatternAdmin(admin.ModelAdmin):
+    list_display = ('sku', 'name',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.Pattern, PatternAdmin)
+
+
+class PaperAdmin(admin.ModelAdmin):
+    list_display = ('sku', 'name',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.Paper, PaperAdmin)

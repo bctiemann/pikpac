@@ -8,6 +8,16 @@ def get_product_image_path(instance, filename):
     filename = '{0}.{1}'.format(uuid.uuid4(), extension)
     return 'products/{0}'.format(filename)
 
+def get_pattern_image_path(instance, filename):
+    extension = filename.split('.')[-1].lower()
+    filename = '{0}.{1}'.format(uuid.uuid4(), extension)
+    return 'patterns/{0}'.format(filename)
+
+def get_paper_image_path(instance, filename):
+    extension = filename.split('.')[-1].lower()
+    filename = '{0}.{1}'.format(uuid.uuid4(), extension)
+    return 'papers/{0}'.format(filename)
+
 def get_template_path(instance, filename):
     extension = filename.split('.')[-1].lower()
     filename = '{0}.{1}'.format(uuid.uuid4(), extension)
@@ -67,3 +77,19 @@ class Template(models.Model):
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     template_file = models.FileField(blank=True, upload_to=get_template_path)
     type = models.CharField(choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0], max_length=40)
+
+
+class Pattern(models.Model):
+    sku = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+    picture = models.ImageField(blank=True, width_field='picture_width', height_field='picture_height', upload_to=get_pattern_image_path)
+    picture_width = models.IntegerField(null=True, blank=True)
+    picture_height = models.IntegerField(null=True, blank=True)
+
+
+class Paper(models.Model):
+    sku = models.CharField(max_length=100, blank=True)
+    name = models.CharField(max_length=200, blank=True)
+    picture = models.ImageField(blank=True, width_field='picture_width', height_field='picture_height', upload_to=get_paper_image_path)
+    picture_width = models.IntegerField(null=True, blank=True)
+    picture_height = models.IntegerField(null=True, blank=True)
