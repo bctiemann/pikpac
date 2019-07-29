@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project
+from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -78,5 +79,41 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'product',
+        )
+
+
+class FaqCategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FaqCategory
+        fields = (
+            'id',
+            'name',
+            'sort_order',
+        )
+
+
+class FaqItemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FaqItem
+        fields = (
+            'id',
+            'title',
+            'body',
+            'sort_order',
+        )
+
+
+class FaqHeadingSerializer(serializers.ModelSerializer):
+    items = FaqItemSerializer(many=True)
+
+    class Meta:
+        model = FaqHeading
+        fields = (
+            'id',
+            'title',
+            'sort_order',
+            'items',
         )
 

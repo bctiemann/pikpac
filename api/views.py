@@ -16,6 +16,7 @@ from rest_framework.decorators import action
 
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project
+from faq.models import FaqCategory, FaqHeading, FaqItem
 from . import serializers, filters
 
 
@@ -145,6 +146,29 @@ class PaperViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Paper.objects.all()
+
+
+class FaqCategoryViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    serializer_class = serializers.FaqCategorySerializer
+
+    def get_queryset(self):
+        return FaqCategory.objects.all()
+
+
+class FaqHeadingViewSet(viewsets.ModelViewSet):
+
+    authentication_classes = ()
+    permission_classes = ()
+    filter_class = filters.FaqHeadingFilter
+
+    serializer_class = serializers.FaqHeadingSerializer
+
+    def get_queryset(self):
+        return FaqHeading.objects.all()
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
