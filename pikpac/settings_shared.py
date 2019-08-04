@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'corsheaders',
     'django_filters',
+    'django_rest_passwordreset',
 
     'accounts',
     'products',
