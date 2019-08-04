@@ -108,7 +108,6 @@ class RegisterView(APIView):
 
         user.set_password(request.data.get('password'))
         user.send_confirm()
-        user.populate_instrument_skills()
         return Response(response)
 
 

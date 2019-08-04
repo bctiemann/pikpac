@@ -27,6 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SITE_NAME = 'Pikpac'
+
+SERVER_HOST = 'pikpac.grotto11.com'
+SERVER_URL_PREFIX = 'http://'
+SERVER_BASE_URL = '{0}{1}'.format(SERVER_URL_PREFIX, SERVER_HOST)
+FRONTEND_BASE_URL = 'http://localhost:3000'
 
 # Application definition
 
@@ -68,7 +74,7 @@ ROOT_URLCONF = 'pikpac.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -156,3 +162,6 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
+
+NOTIFICATION_SENDER_EMAIL = 'notifications@pikpac.com'
+SUPPORT_EMAIL = 'support@pikpac.com'

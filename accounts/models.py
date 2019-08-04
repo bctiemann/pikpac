@@ -1,13 +1,20 @@
 import uuid
+import urllib
 
+from django.conf import settings
+from django.core import mail
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, UserManager, AbstractBaseUser
 from django.utils.translation import ugettext_lazy as _
 from django.utils import six, timezone
+from django.template.loader import get_template
 
 from rest_framework.authentication import TokenAuthentication
 
 from phonenumber_field.modelfields import PhoneNumberField
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class UserManager(BaseUserManager):
@@ -100,13 +107,15 @@ class User(AbstractBaseUser):
 
         text_template = get_template('email/signup_confirm.txt')
         html_template = get_template('email/signup_confirm.html')
-        context = Context({
-            'server_base_url': settings.SERVER_BASE_URL,
-            'email': urllib.quote_plus(self.email),
+        context = {
+            'site_name': settings.SITE_NAME,
+            'server_base_url': settings.FRONTEND_BASE_URL,
+            'confirm_url': '/auth/register-confirm/',
+            'email': urllib.parse.quote_plus(self.email),
             'confirm_hashkey': self.confirm_hashkey,
-        })
+        }
 
-        subject = 'ReBleep account confirmation'
+        subject = 'Pikpac account confirmation'
         text_content = text_template.render(context)
         html_content = html_template.render(context)
 

@@ -1,0 +1,5 @@
+Thank you for signing up for {{ site_name }}!
+
+To confirm your account, please visit the following URL:
+
+{{ server_base_url }}{{ confirm_url }}?em={{ email }}&hk={{ confirm_hashkey }}
