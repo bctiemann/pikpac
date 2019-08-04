@@ -14,6 +14,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
+from accounts.models import User
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
@@ -87,6 +88,80 @@ class MeView(APIView):
             }
         }
         return Response(response)
+
+
+class RegisterView(APIView):
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request):
+        print(request.data)
+        response = {'success': True}
+
+        if not ('email' in request.data and 'password' in request.data):
+            raise ValidationError('Invalid request.')
+
+        user, created = User.objects.get_or_create(email=request.data.get('email'))
+        if not created:
+            raise ValidationError('A user with this email already exists.')
+
+        user.set_password(request.data.get('password'))
+        user.send_confirm()
+        user.populate_instrument_skills()
+        return Response(response)
+
+
+class RegisterConfirmView(APIView):
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request):
+        response = {'success': False}
+        try:
+            user = User.objects.get(email=request.data.get('email'),
+                                    confirm_hashkey=request.data.get('confirm_hashkey'))
+        except User.DoesNotExist:
+            raise ValidationError('Invalid hash key for this account.')
+        print(user)
+
+        user.is_confirmed = True
+        user.save()
+
+        response['success'] = True
+        return Response(response)
+
+
+class PasswordResetTokenCheckView(APIView):
+
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = serializers.PasswordTokenCheckSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        token = serializer.validated_data['token']
+
+        # get token validation time
+        password_reset_token_validation_time = get_password_reset_token_expiry_time()
+
+        # find token
+        reset_password_token = ResetPasswordToken.objects.filter(key=token).first()
+
+        if reset_password_token is None:
+            return Response({'status': 'notfound'}, status=status.HTTP_404_NOT_FOUND)
+
+        # check expiry date
+        expiry_date = reset_password_token.created_at + timedelta(hours=password_reset_token_validation_time)
+
+        if timezone.now() > expiry_date:
+            # delete expired token
+            reset_password_token.delete()
+            return Response({'status': 'expired'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'status': 'OK'})
 
 
 class ProductCategoryViewSet(viewsets.ModelViewSet):

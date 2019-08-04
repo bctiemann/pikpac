@@ -27,6 +27,9 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('me/', views.MeView.as_view(), name='me'),
+    path('register/', views.RegisterView.as_view(), name='register'),
+    path('register/confirm/', views.RegisterConfirmView.as_view(), name='register-confirm'),
+
     # url(r'^register/$', views.RegisterView.as_view(), name='register'),
     # url(r'^register/confirm/$', views.RegisterConfirmView.as_view(), name='register-confirm'),
     # url(r'^skill_levels/$', views.SkillLevelsView.as_view(), name='skill-levels'),
