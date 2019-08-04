@@ -15,7 +15,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project
+from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
 from . import serializers, filters
 
@@ -176,3 +176,10 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Project.objects.all()
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.OrderSerializer
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)

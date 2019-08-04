@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project
+from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
@@ -79,6 +79,18 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'product',
+        )
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'project',
+            'date_created',
         )
 
 

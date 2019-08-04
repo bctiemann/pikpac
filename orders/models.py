@@ -28,3 +28,7 @@ class Design(models.Model):
     design_file = models.FileField(blank=True, upload_to=get_design_path)
 
 
+class Order(models.Model):
+    user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add=True)
