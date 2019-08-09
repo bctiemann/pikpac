@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from unipath import Path
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -146,6 +147,66 @@ MEDIA_ROOT = ''
 
 AUTH_USER_MODEL = 'accounts.User'
 
+# This logging setup has the following attributes:
+# When DEBUG = True, debug information will be displayed on requested page.
+# It will also show any errors/warnings/info in the console output.
+# When DEBUG = False (on production), no debug information will be displayed
+# but any errors will be logged in /logs/django.log (project_dir)
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'colored': {
+            '()': 'colorlog.ColoredFormatter',
+            'datefmt' : "%d/%b/%Y %H:%M:%S",
+            'format': "%(purple)s[%(asctime)s] %(cyan)s[%(name)s:%(lineno)s] %(log_color)s%(levelname)-4s%(reset)s %(white)s%(message)s"
+        }
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+#            '()': 'django.utils.log.RequireDebugTrue'
+        }
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'level':'INFO',
+            'filters': [],
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': Path(__file__).ancestor(2) + "/logs/django.log",
+            'maxBytes': 1024*1024*64, # 64mb
+            'backupCount': 5,
+            'formatter': 'colored',
+        },
+    },
+    'loggers': {
+        # Might have to remove django.request to just '' to get the e-mail
+        # to admin on ERROR working
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        '': {
+            'handlers': ['logfile'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'WARN',
+            'handlers': ['logfile'],
+        }
+    },
+}
 
 # CORS header configuration
 CORS_ORIGIN_ALLOW_ALL = True

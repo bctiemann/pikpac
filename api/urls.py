@@ -29,7 +29,7 @@ urlpatterns = [
     path('me/', views.MeView.as_view(), name='me'),
     path('register/', views.RegisterView.as_view(), name='register'),
     path('register/confirm/', views.RegisterConfirmView.as_view(), name='register-confirm'),
-    path('password_reset/check/', views.PasswordResetTokenCheckView.as_view(), name='password-reset-check-token'),
+    # path('password_reset/check/', views.PasswordResetTokenCheckView.as_view(), name='password-reset-check-token'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
     # url(r'^register/$', views.RegisterView.as_view(), name='register'),
