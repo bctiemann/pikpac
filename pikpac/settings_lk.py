@@ -15,6 +15,7 @@ MEDIA_ROOT = '/usr/local/www/django/pikpac/media'
 CELERY_TASK_ALWAYS_EAGER = True
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'mail.lionking.org'
 
 SITE_EMAIL = 'info@pikpac.com'
 DEBUG_EMAIL = 'btman@mac.com'
