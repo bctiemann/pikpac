@@ -249,7 +249,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
-        return Project.objects.all()
+        return Project.objects.filter(user=self.request.user)
 
 
 class OrderViewSet(viewsets.ModelViewSet):

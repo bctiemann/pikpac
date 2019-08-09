@@ -82,6 +82,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = (
             'id',
+            'title',
             'product',
         )
 

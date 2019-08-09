@@ -12,6 +12,7 @@ def get_design_path(instance, filename):
 class Project(models.Model):
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    title = models.CharField(max_length=150, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(blank=True)
     unit_price = models.DecimalField(max_digits=9, decimal_places=2)
