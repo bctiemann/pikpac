@@ -132,37 +132,6 @@ class RegisterConfirmView(APIView):
         return Response(response)
 
 
-class PasswordResetTokenCheckView(APIView):
-
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = serializers.PasswordTokenCheckSerializer
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        token = serializer.validated_data['token']
-
-        # get token validation time
-        password_reset_token_validation_time = get_password_reset_token_expiry_time()
-
-        # find token
-        reset_password_token = ResetPasswordToken.objects.filter(key=token).first()
-
-        if reset_password_token is None:
-            return Response({'status': 'notfound'}, status=status.HTTP_404_NOT_FOUND)
-
-        # check expiry date
-        expiry_date = reset_password_token.created_at + timedelta(hours=password_reset_token_validation_time)
-
-        if timezone.now() > expiry_date:
-            # delete expired token
-            reset_password_token.delete()
-            return Response({'status': 'expired'}, status=status.HTTP_404_NOT_FOUND)
-
-        return Response({'status': 'OK'})
-
-
 class ProductCategoryViewSet(viewsets.ModelViewSet):
 
     authentication_classes = ()

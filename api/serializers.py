@@ -5,10 +5,6 @@ from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
-class PasswordTokenCheckSerializer(serializers.Serializer):
-    token = serializers.CharField()
-
-
 class ProductCategorySerializer(serializers.ModelSerializer):
 
     class Meta:
