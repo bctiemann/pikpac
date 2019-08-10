@@ -10,11 +10,12 @@ def get_design_path(instance, filename):
 
 
 class Project(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=150, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
-    date_modified = models.DateTimeField(blank=True)
+    date_modified = models.DateTimeField(null=True, blank=True)
     unit_price = models.DecimalField(max_digits=9, decimal_places=2)
     quantity = models.IntegerField(null=True, blank=True, default=0)
     colors = models.IntegerField(null=True, blank=True, default=0)

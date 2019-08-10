@@ -72,7 +72,8 @@ class PaperSerializer(serializers.ModelSerializer):
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    product = ProductSerializer()
+    product = ProductSerializer(read_only=True)
+    product_id = serializers.PrimaryKeyRelatedField(source='product',  queryset=Product.objects.all(), )
 
     class Meta:
         model = Project
@@ -80,6 +81,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'product',
+            'product_id',
+            'unit_price',
         )
 
 

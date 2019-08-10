@@ -220,6 +220,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Project.objects.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        print('a')
+        serializer.is_valid(raise_exception=True)
+        print(serializer)
+        project = serializer.save()
+        project.user = request.user
+        project.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.OrderSerializer
