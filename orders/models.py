@@ -1,5 +1,7 @@
 import uuid
 
+from django_extensions.db.fields import ShortUUIDField
+
 from django.db import models
 
 
@@ -10,7 +12,7 @@ def get_design_path(instance, filename):
 
 
 class Project(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = ShortUUIDField(primary_key=True, editable=False)
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=150, blank=True)
