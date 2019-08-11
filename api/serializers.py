@@ -83,6 +83,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'product',
             'product_id',
             'unit_price',
+            'quantity',
         )
 
 

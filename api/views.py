@@ -229,6 +229,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         project = serializer.save()
         project.user = request.user
         project.save()
+        order = Order.objects.create(project=project, user=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
