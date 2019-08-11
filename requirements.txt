@@ -14,3 +14,4 @@ phonenumbers==8.10.13
 django-rest-passwordreset==1.1.0rc3
 django-extensions==2.2.1
 shortuuid==0.5.0
+stripe==2.34.0

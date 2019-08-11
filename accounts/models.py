@@ -74,6 +74,7 @@ class User(AbstractBaseUser):
     date_of_birth = models.DateField(null=True, blank=True)
     phone_number = PhoneNumberField(blank=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    stripe_customer = models.CharField(null=True, blank=True, max_length=30)
 
     USERNAME_FIELD = 'email'
 

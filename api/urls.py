@@ -32,6 +32,8 @@ urlpatterns = [
     # path('password_reset/check/', views.PasswordResetTokenCheckView.as_view(), name='password-reset-check-token'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
+    path('charge/', views.StripeChargeView.as_view(), name='charge'),
+
     # url(r'^register/$', views.RegisterView.as_view(), name='register'),
     # url(r'^register/confirm/$', views.RegisterConfirmView.as_view(), name='register-confirm'),
     # url(r'^skill_levels/$', views.SkillLevelsView.as_view(), name='skill-levels'),
