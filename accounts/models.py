@@ -83,6 +83,7 @@ class User(AbstractBaseUser):
     stripe_customer = models.CharField(null=True, blank=True, max_length=30)
     billing_address = models.ForeignKey('accounts.Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='billing_users')
     shipping_address = models.ForeignKey('accounts.Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='shipping_users')
+    default_card = models.ForeignKey('accounts.Card', null=True, blank=True, on_delete=models.SET_NULL, related_name='default_for_users')
 
     USERNAME_FIELD = 'email'
 
@@ -201,3 +202,6 @@ class Card(models.Model):
     brand = models.CharField(null=True, blank=True, max_length=30)
     name = models.CharField(null=True, blank=True, max_length=30)
     last_4 = models.CharField(null=True, blank=True, max_length=4)
+
+    def __str__(self):
+        return '{0} ({1})'.format(self.brand, self.last_4)

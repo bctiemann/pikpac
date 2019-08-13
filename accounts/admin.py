@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from .models import User, Address
+from .models import User, Address, Card
 
 import logging
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('email', 'password',)}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'date_of_birth', 'phone_number', 'stripe_customer',)}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'date_of_birth', 'phone_number', 'stripe_customer', 'default_card',)}),
         ('Permissions', {'fields': ('is_admin', 'is_confirmed', 'eula_accepted', 'is_banned', 'deleted',)}),
         ('Addresses', {'fields': ('billing_address', 'shipping_address')}),
     )
@@ -102,3 +102,11 @@ class AddressAdmin(admin.ModelAdmin):
     list_filter = ()
     readonly_fields = ()
 admin.site.register(Address, AddressAdmin)
+
+
+class CardAdmin(admin.ModelAdmin):
+    list_display = ('brand', 'last_4', 'user',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(Card, CardAdmin)
+
