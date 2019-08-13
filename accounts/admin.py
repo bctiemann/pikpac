@@ -5,7 +5,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.utils.translation import ugettext, ugettext_lazy as _
 
-from .models import User
+from .models import User, Address
 
 import logging
 logger = logging.getLogger(__name__)
@@ -76,6 +76,7 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields': ('email', 'password',)}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'date_of_birth', 'phone_number', 'stripe_customer',)}),
         ('Permissions', {'fields': ('is_admin', 'is_confirmed', 'eula_accepted', 'is_banned', 'deleted',)}),
+        ('Addresses', {'fields': ('billing_address', 'shipping_address')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
@@ -94,3 +95,10 @@ admin.site.register(User, UserAdmin)
 # ... and, since we're not using Django's built-in permissions,
 # unregister the Group model from admin.
 admin.site.unregister(Group)
+
+
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ('address_1', 'user',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(Address, AddressAdmin)

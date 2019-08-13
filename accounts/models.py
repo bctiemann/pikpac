@@ -1,5 +1,6 @@
 import uuid
 import urllib
+import stripe
 
 from django.conf import settings
 from django.core import mail
@@ -15,6 +16,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class BearerTokenAuthentication(TokenAuthentication):
+
+    keyword = 'Bearer'
 
 
 class UserManager(BaseUserManager):
@@ -75,6 +81,8 @@ class User(AbstractBaseUser):
     phone_number = PhoneNumberField(blank=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     stripe_customer = models.CharField(null=True, blank=True, max_length=30)
+    billing_address = models.ForeignKey('accounts.Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='billing_users')
+    shipping_address = models.ForeignKey('accounts.Address', null=True, blank=True, on_delete=models.SET_NULL, related_name='shipping_users')
 
     USERNAME_FIELD = 'email'
 
@@ -132,6 +140,16 @@ class User(AbstractBaseUser):
 
         logger.info('Sending confirmation email to {0}'.format(self.email))
 
+    def save(self, *args, **kwargs):
+        if not self.stripe_customer:
+            stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+            stripe_customer = stripe.Customer.create(
+                email=self.email,
+                description="Customer for {0}".format(self.email)
+            )
+            self.stripe_customer = stripe_customer.id
+        return super().save(*args, **kwargs)
+
     @property
     def is_staff(self):
         "Is the user a member of staff?"
@@ -164,6 +182,22 @@ class User(AbstractBaseUser):
         return self.deleted and (timezone.now() - self.deleted).total_seconds() < settings.ACCOUNT_DELETE_GRACE_DAYS * 86400
 
 
-class BearerTokenAuthentication(TokenAuthentication):
+class Address(models.Model):
+    user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    address_1 = models.CharField(max_length=100, blank=True)
+    address_2 = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=30, blank=True)
+    state = models.CharField(max_length=10, blank=True)
+    zip = models.CharField(max_length=10, blank=True)
+    phone_number = PhoneNumberField(blank=True)
 
-    keyword = 'Bearer'
+    def __str__(self):
+        return '{0} ({1})'.format(self.address_1, self.user.email)
+
+
+class Card(models.Model):
+    user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    stripe_card = models.CharField(null=True, blank=True, max_length=30)
+    brand = models.CharField(null=True, blank=True, max_length=30)
+    name = models.CharField(null=True, blank=True, max_length=30)
+    last_4 = models.CharField(null=True, blank=True, max_length=4)

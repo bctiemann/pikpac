@@ -261,18 +261,27 @@ class StripeCustomerView(APIView):
         return Response(response)
 
 
-class StripeCustomerView(APIView):
+# class StripeCustomerView(APIView):
+#
+#     def post(self, request):
+#         response = {}
+#         stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+#
+#         customer = stripe.Customer.create(
+#             email=request.user.email,
+#             description="Customer for jenny.rosen@example.com"
+#         )
+#         response['status'] = 'ok'
+#         return Response(response)
+
+
+class StripeCardView(APIView):
 
     def post(self, request):
         response = {}
         stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
-        customer = stripe.Customer.create(
-            email=request.user.email,
-            description="Customer for jenny.rosen@example.com"
-        )
-        response['status'] = 'ok'
-        return Response(response)
+        logger.info(request.data)
 
 
 class StripeChargeView(APIView):
@@ -282,14 +291,6 @@ class StripeChargeView(APIView):
         stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
 
         logger.info(request.data)
-
-        if not request.user.stripe_customer:
-            stripe_customer = stripe.Customer.create(
-                email=request.user.email,
-                description="Customer for jenny.rosen@example.com"
-            )
-            request.user.stripe_customer = stripe_customer.id
-            request.user.save()
 
         charge = stripe.Charge.create(
             amount=101,
