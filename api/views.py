@@ -8,7 +8,7 @@ from django.contrib.auth import (
 )
 
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework import viewsets, mixins, status
 from rest_framework.exceptions import ValidationError
@@ -81,19 +81,13 @@ class LogoutView(APIView):
         return Response(response)
 
 
-class MeView(APIView):
+class MeView(GenericAPIView):
 
-    def get(self, request):
-        response = {
-            'data': {
-                'id': self.request.user.id,
-                'username': self.request.user.email,
-                'email': self.request.user.email,
-                'first_name': self.request.user.first_name,
-                'last_name': self.request.user.last_name,
-            }
-        }
-        return Response(response)
+    serializer_class = serializers.UserSerializer
+
+    def get(self, request, *args, **kwargs):
+        serializer = self.get_serializer(self.request.user)
+        return Response({ 'data': serializer.data })
 
 
 class RegisterView(APIView):

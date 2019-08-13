@@ -1,8 +1,54 @@
 from rest_framework import serializers
 
+from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
+
+
+class AddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Address
+        fields = (
+            'id',
+            'address_1',
+            'address_2',
+            'city',
+            'state',
+            'zip',
+        )
+
+
+class CardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Card
+        fields = (
+            'id',
+            'stripe_card',
+            'brand',
+            'name',
+            'last_4',
+        )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    shipping_address = AddressSerializer()
+    billing_address = AddressSerializer()
+    default_card = CardSerializer()
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'email',
+            'first_name',
+            'last_name',
+            'shipping_address',
+            'billing_address',
+            'default_card',
+        )
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
