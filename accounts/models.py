@@ -143,7 +143,7 @@ class User(AbstractBaseUser):
 
     def save(self, *args, **kwargs):
         if not self.stripe_customer:
-            stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+            stripe.api_key = settings.STRIPE_SECRET_KEY
             stripe_customer = stripe.Customer.create(
                 email=self.email,
                 description="Customer for {0}".format(self.email)

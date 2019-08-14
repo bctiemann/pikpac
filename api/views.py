@@ -284,7 +284,7 @@ class CardViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def add(self, request):
         print(request.data)
-        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+        stripe.api_key = settings.STRIPE_SECRET_KEY
 
         stripe_card = stripe.Customer.create_source(
             request.user.stripe_customer,
@@ -308,7 +308,7 @@ class StripeCustomerView(APIView):
 
     def post(self, request):
         response = {}
-        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+        stripe.api_key = settings.STRIPE_SECRET_KEY
 
         customer = stripe.Customer.create(
             email=request.user.email,
@@ -322,7 +322,7 @@ class StripeCustomerView(APIView):
 #
 #     def post(self, request):
 #         response = {}
-#         stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+#         stripe.api_key = settings.STRIPE_SECRET_KEY
 #
 #         customer = stripe.Customer.create(
 #             email=request.user.email,
@@ -336,7 +336,7 @@ class StripeCardView(APIView):
 
     def post(self, request):
         response = {}
-        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+        stripe.api_key = settings.STRIPE_SECRET_KEY
 
         logger.info(request.data)
 
@@ -345,7 +345,7 @@ class StripeChargeView(APIView):
 
     def post(self, request):
         response = {}
-        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+        stripe.api_key = settings.STRIPE_SECRET_KEY
 
         logger.info(request.data)
 
