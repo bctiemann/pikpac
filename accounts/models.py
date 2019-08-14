@@ -185,6 +185,7 @@ class User(AbstractBaseUser):
 
 class Address(models.Model):
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    full_name = models.CharField(max_length=50, blank=True)
     address_1 = models.CharField(max_length=100, blank=True)
     address_2 = models.CharField(max_length=100, blank=True)
     country = models.CharField(max_length=30, blank=True)
