@@ -3,6 +3,7 @@ import stripe
 from django.conf import settings
 from django.shortcuts import render
 from django.utils import timezone
+from django.forms.models import model_to_dict
 from django.contrib.auth import (
     login, logout, authenticate, get_user_model, password_validation,
 )
@@ -242,6 +243,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
 
 class AddressViewSet(viewsets.ModelViewSet):
+
     serializer_class = serializers.AddressSerializer
 
     def get_queryset(self):
@@ -270,6 +272,36 @@ class AddressViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['post'])
     def shipping(self, request, *args, **kwargs):
         return self.create(request, address_type='shippin')
+
+
+class CardViewSet(viewsets.ModelViewSet):
+
+    serializer_class = serializers.CardSerializer
+
+    def get_queryset(self):
+        return Card.objects.filter(user=self.request.user)
+
+    @action(detail=False, methods=['post'])
+    def add(self, request):
+        print(request.data)
+        stripe.api_key = settings.STRIPE_TEST_SECRET_KEY
+
+        stripe_card = stripe.Customer.create_source(
+            request.user.stripe_customer,
+            source=request.data['token'],
+        )
+        card = Card.objects.create(
+            stripe_card=stripe_card.id,
+            user=request.user,
+            brand=stripe_card.brand,
+            last_4=stripe_card.last4,
+        )
+        request.user.default_card = card
+        request.user.save()
+        serializer = self.get_serializer(data=model_to_dict(card))
+        serializer.is_valid(raise_exception=True)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class StripeCustomerView(APIView):
