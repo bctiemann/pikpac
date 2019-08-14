@@ -187,10 +187,11 @@ class Address(models.Model):
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     address_1 = models.CharField(max_length=100, blank=True)
     address_2 = models.CharField(max_length=100, blank=True)
+    country = models.CharField(max_length=30, blank=True)
     city = models.CharField(max_length=30, blank=True)
     state = models.CharField(max_length=10, blank=True)
     zip = models.CharField(max_length=10, blank=True)
-    phone_number = PhoneNumberField(blank=True)
+    phone = models.CharField(max_length=10, blank=True)
 
     def __str__(self):
         return '{0} ({1})'.format(self.address_1, self.user.email)

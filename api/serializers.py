@@ -14,9 +14,11 @@ class AddressSerializer(serializers.ModelSerializer):
             'id',
             'address_1',
             'address_2',
+            'country',
             'city',
             'state',
             'zip',
+            'phone',
         )
 
 

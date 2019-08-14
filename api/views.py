@@ -17,7 +17,7 @@ from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
-from accounts.models import User
+from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
 from orders.models import Project, Order
 from faq.models import FaqCategory, FaqHeading, FaqItem
@@ -239,6 +239,37 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class AddressViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.AddressSerializer
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+    def create(self, request, address_type):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        address = serializer.save()
+        address.user = request.user
+        address.save()
+        if address_type == 'billing':
+            request.user.billing_address = address
+        elif address_type == 'shipping':
+            request.user.shipping_address = address
+        request.user.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @action(detail=False, methods=['post'])
+    def billing(self, request, *args, **kwargs):
+        print('billing')
+        return self.create(request, address_type='billing')
+
+    @action(detail=False, methods=['post'])
+    def shipping(self, request, *args, **kwargs):
+        return self.create(request, address_type='shippin')
 
 
 class StripeCustomerView(APIView):
