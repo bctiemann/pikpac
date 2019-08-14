@@ -207,6 +207,8 @@ class Card(models.Model):
     brand = models.CharField(null=True, blank=True, max_length=30)
     name = models.CharField(null=True, blank=True, max_length=30)
     last_4 = models.CharField(null=True, blank=True, max_length=4)
+    exp_month = models.CharField(null=True, blank=True, max_length=2)
+    exp_year = models.CharField(null=True, blank=True, max_length=4)
 
     def __str__(self):
         return '{0} ({1})'.format(self.brand, self.last_4)

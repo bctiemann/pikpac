@@ -303,6 +303,8 @@ class CardViewSet(viewsets.ModelViewSet):
             user=request.user,
             brand=stripe_card.brand,
             last_4=stripe_card.last4,
+            exp_month=stripe_card.exp_month,
+            exp_year=stripe_card.exp_year,
             fingerprint=stripe_card.fingerprint,
         )
         request.user.default_card = card
