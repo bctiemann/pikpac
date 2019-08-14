@@ -281,6 +281,15 @@ class CardViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Card.objects.filter(user=self.request.user)
 
+    @action(detail=False, methods=['get'])
+    def get_token(self, request):
+        print(request.GET)
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+
+        token = stripe.Token.retrieve(request.GET['token'])
+
+        return Response(token, status=status.HTTP_201_CREATED)
+
     @action(detail=False, methods=['post'])
     def add(self, request):
         print(request.data)
@@ -288,8 +297,9 @@ class CardViewSet(viewsets.ModelViewSet):
 
         stripe_card = stripe.Customer.create_source(
             request.user.stripe_customer,
-            source=request.data['token'],
+            source=request.data['token']['id'],
         )
+        print(stripe_card)
         card = Card.objects.create(
             stripe_card=stripe_card.id,
             user=request.user,
