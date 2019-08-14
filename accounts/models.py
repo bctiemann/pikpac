@@ -185,6 +185,7 @@ class User(AbstractBaseUser):
 
 class Address(models.Model):
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add=True)
     full_name = models.CharField(max_length=50, blank=True)
     address_1 = models.CharField(max_length=100, blank=True)
     address_2 = models.CharField(max_length=100, blank=True)
@@ -200,6 +201,7 @@ class Address(models.Model):
 
 class Card(models.Model):
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add=True)
     stripe_card = models.CharField(null=True, blank=True, max_length=30)
     brand = models.CharField(null=True, blank=True, max_length=30)
     name = models.CharField(null=True, blank=True, max_length=30)

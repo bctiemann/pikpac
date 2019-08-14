@@ -98,7 +98,7 @@ admin.site.unregister(Group)
 
 
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ('address_1', 'user',)
+    list_display = ('address_1', 'user', 'date_created',)
     list_filter = ()
     readonly_fields = ()
 admin.site.register(Address, AddressAdmin)
