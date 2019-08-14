@@ -292,19 +292,18 @@ class CardViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['post'])
     def add(self, request):
-        print(request.data)
         stripe.api_key = settings.STRIPE_SECRET_KEY
 
         stripe_card = stripe.Customer.create_source(
             request.user.stripe_customer,
             source=request.data['token']['id'],
         )
-        print(stripe_card)
         card = Card.objects.create(
             stripe_card=stripe_card.id,
             user=request.user,
             brand=stripe_card.brand,
             last_4=stripe_card.last4,
+            fingerprint=stripe_card.fingerprint,
         )
         request.user.default_card = card
         request.user.save()

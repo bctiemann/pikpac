@@ -33,6 +33,7 @@ class CardSerializer(serializers.ModelSerializer):
             'brand',
             'name',
             'last_4',
+            'fingerprint',
         )
 
 
