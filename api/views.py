@@ -374,9 +374,6 @@ class StripeChargeView(APIView):
 
 class TaxRateView(APIView):
 
-    authentication_classes = ()
-    permission_classes = ()
-
     def get(self, request, postal_code):
         try:
             tax_rate, created = TaxRate.objects.get_or_create(postal_code=postal_code)
