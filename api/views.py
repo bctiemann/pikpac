@@ -1,4 +1,5 @@
 import stripe
+from requests import HTTPError
 
 from django.conf import settings
 from django.shortcuts import render
@@ -20,7 +21,7 @@ from rest_framework.decorators import action
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order
+from orders.models import Project, Order, TaxRate
 from faq.models import FaqCategory, FaqHeading, FaqItem
 from . import serializers, filters
 
@@ -368,3 +369,13 @@ class StripeChargeView(APIView):
         )
         response['status'] = 'ok'
         return Response(response)
+
+
+class TaxRateView(APIView):
+
+    def get(self, request, postal_code):
+        try:
+            tax_rate, created = TaxRate.objects.get_or_create(postal_code=postal_code)
+        except HTTPError:
+            return Response({'error': 'invalid postal code'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'total_rate': tax_rate.total_rate})

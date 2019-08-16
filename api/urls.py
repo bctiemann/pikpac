@@ -35,6 +35,7 @@ urlpatterns = [
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
     path('charge/', views.StripeChargeView.as_view(), name='charge'),
+    path('tax_rate/<str:postal_code>/', views.TaxRateView.as_view(), name='tax-rate'),
 
     # url(r'^register/$', views.RegisterView.as_view(), name='register'),
     # url(r'^register/confirm/$', views.RegisterConfirmView.as_view(), name='register-confirm'),
