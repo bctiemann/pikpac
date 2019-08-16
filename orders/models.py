@@ -44,7 +44,7 @@ class Order(models.Model):
 
 class TaxRate(models.Model):
     postal_code = models.CharField(max_length=10, blank=True)
-    country = models.CharField(max_length=20, blank=True)
+    country = models.CharField(max_length=20, default='us')
     total_rate = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
     detail = models.TextField(blank=True)
     date_updated = models.DateTimeField(auto_now_add=True)
