@@ -227,8 +227,11 @@ REST_FRAMEWORK = {
 NOTIFICATION_SENDER_EMAIL = 'notifications@pikpac.com'
 SUPPORT_EMAIL = 'support@pikpac.com'
 
+# Stripe = charge credit cards
 STRIPE_PUBLIC_KEY = os.environ['STRIPE_PUBLIC_KEY']
 STRIPE_SECRET_KEY = os.environ['STRIPE_SECRET_KEY']
 
+# Avalara = zipcode-based tax rates
 AVALARA_ACCOUNT_ID = os.environ['AVALARA_ACCOUNT_ID']
 AVALARA_LICENSE_KEY = os.environ['AVALARA_LICENSE_KEY']
+TAXRATE_CACHE_DAYS = 30

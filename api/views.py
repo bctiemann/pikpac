@@ -8,6 +8,7 @@ from django.forms.models import model_to_dict
 from django.contrib.auth import (
     login, logout, authenticate, get_user_model, password_validation,
 )
+from django.utils.timezone import now
 
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
@@ -373,9 +374,15 @@ class StripeChargeView(APIView):
 
 class TaxRateView(APIView):
 
+    authentication_classes = ()
+    permission_classes = ()
+
     def get(self, request, postal_code):
         try:
             tax_rate, created = TaxRate.objects.get_or_create(postal_code=postal_code)
         except HTTPError:
             return Response({'error': 'invalid postal code'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'total_rate': tax_rate.total_rate})
+        if (now() - tax_rate.date_updated).days > settings.TAXRATE_CACHE_DAYS:
+            tax_rate.update()
+
+        return Response({'total_rate': tax_rate.total_rate, 'date_updated': str(tax_rate.date_updated)})
