@@ -1,6 +1,10 @@
 import uuid
+import json
+from client import AvataxClient
 
+from django.conf import settings
 from django_extensions.db.fields import ShortUUIDField
+from django.utils.timezone import now
 
 from django.db import models
 
@@ -36,3 +40,35 @@ class Order(models.Model):
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
+
+
+class TaxRate(models.Model):
+    postal_code = models.CharField(max_length=10, blank=True)
+    country = models.CharField(max_length=20, blank=True)
+    total_rate = models.DecimalField(max_digits=10, decimal_places=5, null=True, blank=True)
+    detail = models.TextField(blank=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{0}: {1}'.format(self.postal_code, self.total_rate)
+
+    def update(self):
+        client = AvataxClient(
+            'Pikpac',
+            'v0.1',
+            'Backend server 001',
+            'production'
+        )
+        client.add_credentials(settings.AVALARA_ACCOUNT_ID, settings.AVALARA_LICENSE_KEY)
+        response = client.tax_rates_by_postal_code(include={'country': self.country, 'postalCode': self.postal_code})
+        response.raise_for_status()
+        result = response.json()
+        self.total_rate = result['totalRate']
+        self.detail = json.dumps(result['rates'])
+        self.date_updated = now()
+        self.save()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.total_rate:
+            self.update()

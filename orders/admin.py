@@ -22,3 +22,10 @@ class DesignAdmin(admin.ModelAdmin):
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.Design, DesignAdmin)
+
+
+class TaxRateAdmin(admin.ModelAdmin):
+    list_display = ('postal_code', 'total_rate', 'date_updated',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.TaxRate, TaxRateAdmin)
