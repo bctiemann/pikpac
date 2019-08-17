@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order
+from orders.models import Project, Order, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
@@ -143,11 +143,23 @@ class OrderSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
 
     class Meta:
-        model = Project
+        model = Order
         fields = (
             'id',
             'project',
             'date_created',
+        )
+
+
+class ShippingOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = ShippingOption
+        fields = (
+            'id',
+            'name',
+            'price',
+            'business_days',
         )
 
 

@@ -22,7 +22,7 @@ from rest_framework.decorators import action
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order, TaxRate
+from orders.models import Project, Order, TaxRate, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 from . import serializers, filters
 
@@ -383,3 +383,10 @@ class TaxRateView(APIView):
             tax_rate.update()
 
         return Response({'total_rate': tax_rate.total_rate, 'date_updated': str(tax_rate.date_updated)})
+
+
+class ShippingOptionViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ShippingOptionSerializer
+
+    def get_queryset(self):
+        return ShippingOption.objects.all()

@@ -29,3 +29,10 @@ class TaxRateAdmin(admin.ModelAdmin):
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.TaxRate, TaxRateAdmin)
+
+
+class ShippingOptionAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'business_days',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.ShippingOption, ShippingOptionAdmin)

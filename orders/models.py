@@ -72,3 +72,12 @@ class TaxRate(models.Model):
         super().save(*args, **kwargs)
         if not self.total_rate:
             self.update()
+
+
+class ShippingOption(models.Model):
+    name = models.CharField(max_length=30, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True)
+    business_days = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        ordering: ('-price')
