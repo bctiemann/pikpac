@@ -22,7 +22,7 @@ from rest_framework.decorators import action
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order, TaxRate, ShippingOption
+from orders.models import Project, Order, Design, TaxRate, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 from . import serializers, filters
 
@@ -226,9 +226,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
-        print('a')
         serializer.is_valid(raise_exception=True)
-        print(serializer)
         project = serializer.save()
         project.user = request.user
         project.save()
@@ -242,6 +240,23 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
+
+
+class DesignViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.DesignSerializer
+
+    def get_queryset(self):
+        return Design.objects.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        design = serializer.save()
+        design.user = request.user
+        design.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class AddressViewSet(viewsets.ModelViewSet):

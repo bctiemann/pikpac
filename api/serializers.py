@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order, ShippingOption
+from orders.models import Project, Order, Design, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
@@ -150,6 +150,19 @@ class OrderSerializer(serializers.ModelSerializer):
             'date_created',
         )
 
+
+class DesignSerializer(serializers.ModelSerializer):
+    project = ProjectSerializer(read_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(source='project',  queryset=Project.objects.all(), )
+
+    class Meta:
+        model = Design
+        fields = (
+            'id',
+            'project',
+            'project_id',
+            'design_file',
+        )
 
 class ShippingOptionSerializer(serializers.ModelSerializer):
 
