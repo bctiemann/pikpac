@@ -16,7 +16,13 @@ def get_design_path(instance, filename):
 
 
 class Project(models.Model):
+    TYPE_CHOICES = (
+        ('template', 'Predefined Template'),
+        ('custom', 'Custom Design'),
+    )
+
     id = ShortUUIDField(primary_key=True, editable=False)
+    type = models.CharField(max_length=30, choices=TYPE_CHOICES, null=True, blank=True)
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=150, blank=True)
