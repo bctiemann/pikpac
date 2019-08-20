@@ -1,11 +1,9 @@
-from django.conf import settings
-from django.conf.urls.static import static
-from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework import routers
 
 from api import views
+from api.views import auth, charge
 
 router = routers.DefaultRouter()
 router.register('categories', views.ProductCategoryViewSet, basename='category')
@@ -28,15 +26,15 @@ router.register('faq_headings', views.FaqHeadingViewSet, basename='faq_heading')
 # router.register(r'instruments', views.InstrumentViewSet, basename='instrument')
 
 urlpatterns = [
-    path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(), name='logout'),
-    path('me/', views.MeView.as_view(), name='me'),
-    path('register/', views.RegisterView.as_view(), name='register'),
-    path('register/confirm/', views.RegisterConfirmView.as_view(), name='register-confirm'),
+    path('login/', auth.LoginView.as_view(), name='login'),
+    path('logout/', auth.LogoutView.as_view(), name='logout'),
+    path('me/', auth.MeView.as_view(), name='me'),
+    path('register/', auth.RegisterView.as_view(), name='register'),
+    path('register/confirm/', auth.RegisterConfirmView.as_view(), name='register-confirm'),
     # path('password_reset/check/', views.PasswordResetTokenCheckView.as_view(), name='password-reset-check-token'),
     path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
 
-    path('charge/', views.StripeChargeView.as_view(), name='charge'),
+    path('charge/', charge.StripeChargeView.as_view(), name='charge'),
     path('tax_rate/<str:postal_code>/', views.TaxRateView.as_view(), name='tax-rate'),
 
     # url(r'^register/$', views.RegisterView.as_view(), name='register'),
