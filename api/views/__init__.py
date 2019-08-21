@@ -130,7 +130,10 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user)
+        queryset = Order.objects.filter(user=self.request.user)
+        if not self.request.GET.get('include_cancelled'):
+            queryset = queryset.exclude(status=Order.CANCELLED)
+        return queryset
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
