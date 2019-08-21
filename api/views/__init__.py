@@ -132,13 +132,14 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Order.objects.filter(user=self.request.user)
         if not self.request.GET.get('include_cancelled'):
-            queryset = queryset.exclude(status=Order.CANCELLED)
+            queryset = queryset.exclude(is_cancelled=True)
         return queryset
 
     @action(detail=True, methods=['post'])
     def cancel(self, request, pk=None):
         order = self.get_object()
         order.status = Order.CANCELLED
+        order.is_cancelled = True
         order.date_status_changed = now()
         order.save()
 

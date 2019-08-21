@@ -66,6 +66,8 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_status_changed = models.DateTimeField(null=True, blank=True)
     status = models.CharField(choices=STATUS_CHOICES, max_length=30, blank=True, default=STATUS_CHOICES[0][0])
+    is_cancelled = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False)
 
 
 class TaxRate(models.Model):

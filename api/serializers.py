@@ -156,6 +156,8 @@ class OrderSerializer(serializers.ModelSerializer):
             'date_created',
             'date_status_changed',
             'status',
+            'is_cancelled',
+            'is_paid',
         )
 
 
