@@ -127,7 +127,7 @@ class PaperSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(source='product',  queryset=Product.objects.all(), )
-    type = serializers.CharField(source='get_type_display')
+    type = serializers.CharField(source='get_type_display', read_only=True)
 
     class Meta:
         model = Project
