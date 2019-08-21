@@ -43,9 +43,29 @@ class Design(models.Model):
 
 
 class Order(models.Model):
+    OPEN = 'open'
+    SUBMITTED = 'submitted'
+    PROOF = 'proof'
+    APPROVED = 'approved'
+    PRODUCTION = 'production'
+    SHIPPED = 'shipped'
+    CANCELLED = 'cancelled'
+
+    STATUS_CHOICES = (
+        (OPEN, 'Open'),
+        (SUBMITTED, 'Submitted'),
+        (PROOF, 'Awaiting customer approval'),
+        (APPROVED, 'Approved'),
+        (PRODUCTION, 'In production'),
+        (SHIPPED, 'Shipped'),
+        (CANCELLED, 'Cancelled'),
+    )
+
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
+    date_status_changed = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(choices=STATUS_CHOICES, max_length=30, blank=True, default=STATUS_CHOICES[0][0])
 
 
 class TaxRate(models.Model):

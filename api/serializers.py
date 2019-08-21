@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
@@ -126,6 +127,7 @@ class PaperSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(source='product',  queryset=Product.objects.all(), )
+    type = serializers.CharField(source='get_type_display')
 
     class Meta:
         model = Project
@@ -141,14 +143,19 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    project = ProjectSerializer()
+    project = ProjectSerializer(read_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(source='project',  queryset=Project.objects.all(), )
+    status = serializers.CharField(source='get_status_display')
 
     class Meta:
         model = Order
         fields = (
             'id',
             'project',
+            'project_id',
             'date_created',
+            'date_status_changed',
+            'status',
         )
 
 

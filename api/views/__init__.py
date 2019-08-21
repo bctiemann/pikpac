@@ -132,6 +132,15 @@ class OrderViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
+    @action(detail=True, methods=['post'])
+    def cancel(self, request, pk=None):
+        order = self.get_object()
+        order.status = Order.CANCELLED
+        order.date_status_changed = now()
+        order.save()
+
+        return Response({'status': 'ok'})
+
 
 class DesignViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.DesignSerializer
