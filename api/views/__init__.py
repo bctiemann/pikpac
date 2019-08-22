@@ -109,20 +109,25 @@ class FaqHeadingViewSet(viewsets.ModelViewSet):
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
+
+    permission_classes = ()
     serializer_class = serializers.ProjectSerializer
 
     def get_queryset(self):
-        return Project.objects.filter(user=self.request.user)
+        if self.request.user.is_authenticated:
+            return Project.objects.filter(user=self.request.user)
+        return Project.objects.all()
 
     def create(self, request, *args, **kwargs):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         project = serializer.save()
-        project.user = request.user
+        if request.user.is_authenticated:
+            project.user = request.user
         project.client_fingerprint = request.headers.get('Client-Fingerprint')
         project.save()
-        order = Order.objects.create(project=project, user=request.user)
+        order = Order.objects.create(project=project, user=request.user if request.user.is_authenticated else None)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
