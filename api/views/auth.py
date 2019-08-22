@@ -27,7 +27,6 @@ class LoginView(APIView):
 
     def post(self, request):
         response = {}
-        print(request.data)
         if not ('email' in request.data and ('password' in request.data or 'confirm_hashkey' in request.data)):
             raise ValidationError('Invalid request.')
 
