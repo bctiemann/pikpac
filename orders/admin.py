@@ -4,9 +4,10 @@ from orders import models
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', 'date_created', 'user', 'type', 'product',)
     list_filter = ()
     readonly_fields = ()
+    search_fields = ('user__email',)
 admin.site.register(models.Project, ProjectAdmin)
 
 
