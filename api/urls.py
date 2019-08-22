@@ -3,7 +3,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from api import views
-from api.views import auth, charge
+from api.views import auth, charge, admin
 
 router = routers.DefaultRouter()
 router.register('categories', views.ProductCategoryViewSet, basename='category')
@@ -24,6 +24,9 @@ router.register('faq_headings', views.FaqHeadingViewSet, basename='faq_heading')
 # router.register(r'program_pieces', views.ProgramPieceViewSet, basename='program_piece')
 # router.register(r'players', views.PlayerViewSet, basename='player')
 # router.register(r'instruments', views.InstrumentViewSet, basename='instrument')
+
+admin_router = routers.DefaultRouter()
+admin_router.register('orders', admin.OrderViewSet, basename='order')
 
 urlpatterns = [
     path('login/', auth.LoginView.as_view(), name='login'),
@@ -51,5 +54,6 @@ urlpatterns = [
     # url(r'^password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     #
     path('', include(router.urls)),
+    path('admin/', include(admin_router.urls)),
 ]
 
