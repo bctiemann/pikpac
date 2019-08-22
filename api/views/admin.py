@@ -16,6 +16,7 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.exceptions import ValidationError
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAdminUser
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
@@ -27,17 +28,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# https://stackoverflow.com/questions/44533277/django-rest-framework-restrict-user-data-view-to-admins-the-very-own-user
-
-class AdminMixin(UserPassesTestMixin):
-
-    def test_func(self):
-        print(self.request.user)
-        return self.request.user.is_admin
-
-
-class OrderViewSet(AdminMixin, viewsets.ModelViewSet):
+class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.OrderSerializer
+    permission_classes = (IsAdminUser,)
 
     def get_queryset(self):
         queryset = Order.objects.all()
