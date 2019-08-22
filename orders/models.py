@@ -25,6 +25,7 @@ class Project(models.Model):
     type = models.CharField(max_length=30, choices=TYPE_CHOICES, null=True, blank=True)
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
+    client_fingerprint = models.UUIDField(null=True, blank=True)
     title = models.CharField(max_length=150, blank=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(null=True, blank=True)

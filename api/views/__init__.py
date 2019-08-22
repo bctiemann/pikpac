@@ -120,6 +120,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         project = serializer.save()
         project.user = request.user
+        project.client_fingerprint = request.headers.get('Client-Fingerprint')
         project.save()
         order = Order.objects.create(project=project, user=request.user)
         headers = self.get_success_headers(serializer.data)

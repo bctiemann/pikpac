@@ -135,6 +135,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'type',
+            'client_fingerprint',
             'title',
             'product',
             'product_id',
