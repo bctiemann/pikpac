@@ -4,7 +4,7 @@ from orders import models
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'date_created', 'user', 'type', 'product',)
+    list_display = ('id', 'title', 'date_created', 'user', 'type', 'product',)
     list_filter = ()
     readonly_fields = ()
     search_fields = ('user__email',)
