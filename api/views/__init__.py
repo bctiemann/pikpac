@@ -122,6 +122,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         print(request.data)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        print(serializer.validated_data)
         project = serializer.save()
         if request.user.is_authenticated:
             project.user = request.user
