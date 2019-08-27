@@ -7,6 +7,7 @@ from django.contrib.auth import (
     login, logout, authenticate, get_user_model, password_validation,
 )
 from django.utils.timezone import now
+from django.db.models import Q
 
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, RetrieveAPIView
@@ -115,8 +116,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
-            return Project.objects.filter(user=self.request.user)
-        return Project.objects.all()
+            return Project.objects.filter(
+                Q(user=self.request.user) | Q(client_fingerprint=self.request.headers.get('Client-Fingerprint'))
+            )
+        return Project.objects.filter(client_fingerprint=self.request.headers.get('Client-Fingerprint'))
+        # return Project.objects.all()
 
     def create(self, request, *args, **kwargs):
         print(request.data)
