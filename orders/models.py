@@ -34,6 +34,9 @@ class Project(models.Model):
     colors = models.IntegerField(null=True, blank=True, default=0)
     design = models.ForeignKey('orders.Design', null=True, blank=True, on_delete=models.SET_NULL, related_name='projects')
 
+    def __str__(self):
+        return '{0} {1}'.format(self.pk, self.user)
+
     class Meta:
         ordering = ('-date_created',)
 

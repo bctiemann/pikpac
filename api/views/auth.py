@@ -14,6 +14,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 
 from accounts.models import User
+from orders.models import Project
 from api import serializers, filters
 
 import logging
@@ -58,6 +59,11 @@ class LoginView(APIView):
         response['token'] = auth_token.key
 
         login(request, user)
+
+        # Claim projects created by this user (id'd by fingerprint) while logged out
+        for project in Project.objects.filter(user=None, client_fingerprint=request.headers.get('Client-Fingerprint')):
+            project.user = user
+            project.save()
 
         return Response(response)
 
