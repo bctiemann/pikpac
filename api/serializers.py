@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from accounts.models import User, Address, Card
-from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
+from products.models import ProductCategory, Product, ProductPrice, Template, Pattern, Paper
 from orders.models import Project, Order, Design, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
@@ -82,10 +82,23 @@ class ProductPriceSerializer(serializers.ModelSerializer):
         )
 
 
+class TemplateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Template
+        fields = (
+            'id',
+            'template_file',
+            'template_file_filename',
+            'type',
+        )
+
+
 class ProductSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer()
     collapsibility = serializers.CharField(source='get_collapsibility_display')
     prices = ProductPriceSerializer(many=True)
+    default_template = TemplateSerializer()
 
     class Meta:
         model = Product
@@ -98,6 +111,7 @@ class ProductSerializer(serializers.ModelSerializer):
             'collapsibility',
             'picture',
             'prices',
+            'default_template',
         )
 
 

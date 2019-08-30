@@ -1,4 +1,5 @@
 import uuid
+import os
 
 from django.db import models
 
@@ -19,9 +20,8 @@ def get_paper_image_path(instance, filename):
     return 'papers/{0}'.format(filename)
 
 def get_template_path(instance, filename):
-    extension = filename.split('.')[-1].lower()
-    filename = '{0}.{1}'.format(uuid.uuid4(), extension)
-    return 'templates/{0}'.format(filename)
+    dir_name = uuid.uuid4()
+    return 'templates/{0}/{1}'.format(dir_name, filename)
 
 
 class ProductCategory(models.Model):
@@ -54,6 +54,7 @@ class Product(models.Model):
     picture_height = models.IntegerField(null=True, blank=True)
     pieces = models.IntegerField(null=True, blank=True)
     collapsibility = models.CharField(choices=COLLAPSIBILITY_CHOICES, default=COLLAPSIBILITY_CHOICES[0][0], max_length=10)
+    default_template = models.ForeignKey('products.Template', null=True, blank=True, on_delete=models.SET_NULL, related_name='current_products')
 
     def __str__(self):
         return self.name
@@ -77,6 +78,10 @@ class Template(models.Model):
     product = models.ForeignKey('products.Product', null=True, blank=True, on_delete=models.SET_NULL)
     template_file = models.FileField(blank=True, upload_to=get_template_path)
     type = models.CharField(choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0], max_length=40)
+
+    @property
+    def template_file_filename(self):
+        return os.path.basename(self.template_file.name)
 
 
 class Pattern(models.Model):
