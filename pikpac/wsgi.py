@@ -14,6 +14,10 @@ env_variables_to_pass = [
     'BASE_PATH',
     'SECRET_KEY',
     'DJANGO_SETTINGS_MODULE',
+    'STRIPE_PUBLIC_KEY',
+    'STRIPE_SECRET_KEY',
+    'AVALARA_ACCOUNT_ID',
+    'AVALARA_LICENSE_KEY',
 ]
 
 def application(environ, start_response):
