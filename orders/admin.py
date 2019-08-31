@@ -19,7 +19,7 @@ admin.site.register(models.Order, OrderAdmin)
 
 
 class DesignAdmin(admin.ModelAdmin):
-    list_display = ('id', 'project',)
+    list_display = ('id', 'project', 'pattern', 'paper',)
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.Design, DesignAdmin)
