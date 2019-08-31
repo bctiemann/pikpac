@@ -47,6 +47,8 @@ class Design(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     template = models.ForeignKey('products.Template', null=True, blank=True, on_delete=models.SET_NULL)
     design_file = models.FileField(blank=True, upload_to=get_design_path)
+    pattern = models.ForeignKey('products.Pattern', null=True, blank=True, on_delete=models.SET_NULL)
+    paper = models.ForeignKey('products.Paper', null=True, blank=True, on_delete=models.SET_NULL)
 
 
 class Order(models.Model):

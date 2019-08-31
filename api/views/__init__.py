@@ -131,6 +131,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
         if request.user.is_authenticated:
             project.user = request.user
         project.client_fingerprint = request.headers.get('Client-Fingerprint')
+        design = Design.objects.create(user=request.user, project=project)
+        project.design = design
         project.save()
         order = Order.objects.create(project=project, user=request.user if request.user.is_authenticated else None)
         headers = self.get_success_headers(serializer.data)
@@ -162,6 +164,30 @@ class DesignViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Design.objects.filter(user=self.request.user)
+
+    def partial_update(self, request, *args, **kwargs):
+        print(request.data)
+        pattern = None
+        paper = None
+
+        if request.data['pattern']:
+            try:
+                pattern = Pattern.objects.get(pk=request.data['pattern']['id'])
+            except Pattern.DoesNotExist:
+                return Response({'error': 'Invalid pattern'})
+
+        if request.data['paper']:
+            try:
+                paper = Paper.objects.get(pk=request.data['paper']['id'])
+            except Paper.DoesNotExist:
+                return Response({'error': 'Invalid paper'})
+
+        design = self.get_object()
+        design.paper = paper
+        design.pattern = pattern
+        design.save()
+
+        return Response({})
 
     def create(self, request, *args, **kwargs):
         print(request.data)

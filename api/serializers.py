@@ -139,10 +139,34 @@ class PaperSerializer(serializers.ModelSerializer):
         )
 
 
+class DesignSerializer(serializers.ModelSerializer):
+    # project = ProjectSerializer(read_only=True)
+    project_id = serializers.PrimaryKeyRelatedField(source='project',  queryset=Project.objects.all())
+    pattern = PatternSerializer(read_only=False)
+    # pattern_id = serializers.PrimaryKeyRelatedField(source='pattern',  queryset=Pattern.objects.all())
+    paper = PaperSerializer(read_only=False)
+    # paper_id = serializers.PrimaryKeyRelatedField(source='paper',  queryset=Paper.objects.all())
+
+    class Meta:
+        model = Design
+        fields = (
+            'id',
+            # 'project',
+            'project_id',
+            'design_file',
+            'pattern',
+            # 'pattern_id',
+            'paper',
+            # 'paper_id',
+        )
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(source='product',  queryset=Product.objects.all())
     type_display = serializers.CharField(source='get_type_display', read_only=True)
+    design = DesignSerializer(read_only=True)
+    # design_id = serializers.PrimaryKeyRelatedField(source='design', read_only=True)
 
     class Meta:
         model = Project
@@ -156,6 +180,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'product_id',
             'unit_price',
             'quantity',
+            'design',
+            # 'design_id',
         )
 
 
@@ -177,19 +203,6 @@ class OrderSerializer(serializers.ModelSerializer):
             'is_paid',
         )
 
-
-class DesignSerializer(serializers.ModelSerializer):
-    project = ProjectSerializer(read_only=True)
-    project_id = serializers.PrimaryKeyRelatedField(source='project',  queryset=Project.objects.all(), )
-
-    class Meta:
-        model = Design
-        fields = (
-            'id',
-            'project',
-            'project_id',
-            'design_file',
-        )
 
 class ShippingOptionSerializer(serializers.ModelSerializer):
 

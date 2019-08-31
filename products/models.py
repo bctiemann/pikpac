@@ -91,6 +91,9 @@ class Pattern(models.Model):
     picture_width = models.IntegerField(null=True, blank=True)
     picture_height = models.IntegerField(null=True, blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class Paper(models.Model):
     sku = models.CharField(max_length=100, blank=True)
@@ -98,3 +101,6 @@ class Paper(models.Model):
     picture = models.ImageField(blank=True, width_field='picture_width', height_field='picture_height', upload_to=get_paper_image_path)
     picture_width = models.IntegerField(null=True, blank=True)
     picture_height = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
