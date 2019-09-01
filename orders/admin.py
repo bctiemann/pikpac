@@ -12,7 +12,7 @@ admin.site.register(models.Project, ProjectAdmin)
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('id',)
+    list_display = ('id', 'order_number', 'project', 'user', 'date_created', 'status', 'date_status_changed',)
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.Order, OrderAdmin)

@@ -1,6 +1,7 @@
 import uuid
 import json
 from client import AvataxClient
+import random
 
 from django.conf import settings
 from django_extensions.db.fields import ShortUUIDField
@@ -33,6 +34,10 @@ class Project(models.Model):
     quantity = models.IntegerField(null=True, blank=True, default=0)
     colors = models.IntegerField(null=True, blank=True, default=0)
     design = models.ForeignKey('orders.Design', null=True, blank=True, on_delete=models.SET_NULL, related_name='projects')
+
+    @property
+    def order(self):
+        return self.order_set.first()
 
     def __str__(self):
         return '{0} {1}'.format(self.pk, self.user)
@@ -70,6 +75,7 @@ class Order(models.Model):
         (CANCELLED, 'Cancelled'),
     )
 
+    order_number = models.CharField(max_length=20, null=True, blank=True)
     user = models.ForeignKey('accounts.User', null=True, blank=True, on_delete=models.SET_NULL)
     project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -77,6 +83,16 @@ class Order(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=30, blank=True, default=STATUS_CHOICES[0][0])
     is_cancelled = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.order_number:
+            random.seed(self.project.id)
+            self.order_number = str(random.randint(0, settings.MAX_ORDER_NUMBER)).rjust(8, '0')
+            self.save()
+
+    def __str__(self):
+        return '#{0} {1}'.format(self.order_number, self.user.email)
 
 
 class TaxRate(models.Model):

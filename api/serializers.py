@@ -161,12 +161,29 @@ class DesignSerializer(serializers.ModelSerializer):
         )
 
 
+class OrderSerializerForProject(serializers.ModelSerializer):
+    status = serializers.CharField(source='get_status_display')
+
+    class Meta:
+        model = Order
+        fields = (
+            'id',
+            'order_number',
+            'date_created',
+            'date_status_changed',
+            'status',
+            'is_cancelled',
+            'is_paid',
+        )
+
+
 class ProjectSerializer(serializers.ModelSerializer):
     product = ProductSerializer(read_only=True)
     product_id = serializers.PrimaryKeyRelatedField(source='product',  queryset=Product.objects.all())
     type_display = serializers.CharField(source='get_type_display', read_only=True)
     design = DesignSerializer(read_only=True)
     # design_id = serializers.PrimaryKeyRelatedField(source='design', read_only=True)
+    order = OrderSerializerForProject(read_only=True)
 
     class Meta:
         model = Project
@@ -181,6 +198,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'unit_price',
             'quantity',
             'design',
+            'order',
             # 'design_id',
         )
 
@@ -194,6 +212,7 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = (
             'id',
+            'order_number',
             'project',
             'project_id',
             'date_created',
