@@ -7,7 +7,7 @@ class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'date_created', 'user', 'type', 'product',)
     list_filter = ()
     readonly_fields = ()
-    search_fields = ('user__email',)
+    search_fields = ('user__email', 'id',)
 admin.site.register(models.Project, ProjectAdmin)
 
 
@@ -23,6 +23,14 @@ class DesignAdmin(admin.ModelAdmin):
     list_filter = ()
     readonly_fields = ()
 admin.site.register(models.Design, DesignAdmin)
+
+
+class ProofAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'date_created', 'created_by', 'proof_file',)
+    list_filter = ()
+    readonly_fields = ()
+    autocomplete_fields = ('project', 'created_by',)
+admin.site.register(models.Proof, ProofAdmin)
 
 
 class TaxRateAdmin(admin.ModelAdmin):

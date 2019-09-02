@@ -15,6 +15,11 @@ def get_design_path(instance, filename):
     filename = '{0}.{1}'.format(uuid.uuid4(), extension)
     return 'designs/{0}'.format(filename)
 
+def get_proof_path(instance, filename):
+    extension = filename.split('.')[-1].lower()
+    filename = '{0}.{1}'.format(uuid.uuid4(), extension)
+    return 'proofs/{0}'.format(filename)
+
 
 class Project(models.Model):
     TYPE_CHOICES = (
@@ -93,6 +98,14 @@ class Order(models.Model):
 
     def __str__(self):
         return '#{0} {1}'.format(self.order_number, self.user.email)
+
+
+class Proof(models.Model):
+    project = models.ForeignKey('orders.Project', null=True, blank=True, on_delete=models.SET_NULL)
+    date_created = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey('accounts.user', null=True, blank=True, on_delete=models.SET_NULL)
+    proof_file = models.FileField(blank=True, upload_to=get_proof_path)
+    comments = models.TextField(blank=True)
 
 
 class TaxRate(models.Model):
