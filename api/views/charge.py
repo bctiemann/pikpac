@@ -143,6 +143,9 @@ class StripeChargeView(APIView):
             return Response({'status': 'error', 'error': err})
 
         response['status'] = 'ok'
+        response['total_charged'] = total_cents / 100
+        response['cart_details'] = request.data['cart']
+
         return Response(response)
 
 
