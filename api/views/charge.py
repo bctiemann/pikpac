@@ -48,10 +48,21 @@ class CardViewSet(viewsets.ModelViewSet):
             stripe_card = stripe.Customer.create_source(
                 request.user.stripe_customer,
                 source=request.data['token']['id'],
+                # source='tok_chargeCustomerFail',
             )
         except stripe.error.CardError as e:
-            print(e)
-            return Response({'status': 'error'})
+            body = e.json_body
+            err = body.get('error', {})
+
+            print("Status is: %s" % e.http_status)
+            print("Type is: %s" % err.get('type'))
+            print("Code is: %s" % err.get('code'))
+            # param is '' in this case
+            print("Param is: %s" % err.get('param'))
+            print("Message is: %s" % err.get('message'))
+
+            return Response({'status': 'error', 'error': err})
+
         card = Card.objects.create(
             stripe_card=stripe_card.id,
             user=request.user,
@@ -107,39 +118,29 @@ class StripeChargeView(APIView):
 
         order_numbers = [c['order']['order_number'] for c in request.data['cart']]
 
-        charge = stripe.Charge.create(
-            amount=total_cents,
-            currency="usd",
-            # source=request.data['token'],  # obtained with Stripe.js
-            source=request.user.default_card.stripe_card,
-            customer=request.user.stripe_customer,
-            description='Charge for order(s) {0}'.format(', '.join(order_numbers))
-        )
-        print(charge)
-        print(charge['outcome'])
+        try:
+            charge = stripe.Charge.create(
+                amount=total_cents,
+                currency="usd",
+                # source=request.data['token'],  # obtained with Stripe.js
+                source=request.user.default_card.stripe_card,
+                customer=request.user.stripe_customer,
+                description='Charge for order(s) {0}'.format(', '.join(order_numbers))
+            )
+            print(charge)
+            print(charge['outcome'])
+        except stripe.error.CardError as e:
+            body = e.json_body
+            err = body.get('error', {})
 
-        # if charge['status'] == 'succeeded':
-        #     print('succeeded')
-        #     stripe_card = stripe.Customer.create_source(
-        #         request.user.stripe_customer,
-        #         source=request.data['token'],
-        #     )
-        #     card = Card.objects.create(
-        #         stripe_card=stripe_card.id,
-        #         user=request.user,
-        #         brand=stripe_card.brand,
-        #         last_4=stripe_card.last4,
-        #         exp_month=stripe_card.exp_month,
-        #         exp_year=stripe_card.exp_year,
-        #         fingerprint=stripe_card.fingerprint,
-        #     )
-        #     request.user.default_card = card
-        #     request.user.save()
-        #
-        #     stripe.Charge.modify(
-        #         charge['id'],
-        #         customer=request.user.stripe_customer,
-        #     )
+            print("Status is: %s" % e.http_status)
+            print("Type is: %s" % err.get('type'))
+            print("Code is: %s" % err.get('code'))
+            # param is '' in this case
+            print("Param is: %s" % err.get('param'))
+            print("Message is: %s" % err.get('message'))
+
+            return Response({'status': 'error', 'error': err})
 
         response['status'] = 'ok'
         return Response(response)
