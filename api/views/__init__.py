@@ -146,8 +146,6 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Order.objects.filter(user=self.request.user)
-        if not self.request.GET.get('include_cancelled'):
-            queryset = queryset.exclude(is_cancelled=True)
         return queryset
 
     @action(detail=True, methods=['post'])
