@@ -142,6 +142,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.OrderSerializer
+    filter_class = filters.OrderStatusFilter
 
     def get_queryset(self):
         queryset = Order.objects.filter(user=self.request.user)
