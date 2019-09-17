@@ -3,7 +3,7 @@ from rest_framework.exceptions import ValidationError
 
 from accounts.models import User, Address, Card
 from products.models import ProductCategory, Product, ProductPrice, Template, Pattern, Paper
-from orders.models import Project, Order, Design, ShippingOption
+from orders.models import Project, Order, Design, DesignElement, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 
 
@@ -139,6 +139,22 @@ class PaperSerializer(serializers.ModelSerializer):
         )
 
 
+class DesignElementSerializer(serializers.ModelSerializer):
+    type = serializers.CharField(source='get_type_display')
+
+    class Meta:
+        model = DesignElement
+        fields = (
+            'id',
+            'type',
+            'width',
+            'height',
+            'left',
+            'top',
+            'angle',
+        )
+
+
 class DesignSerializer(serializers.ModelSerializer):
     # project = ProjectSerializer(read_only=True)
     project_id = serializers.PrimaryKeyRelatedField(source='project',  queryset=Project.objects.all())
@@ -146,6 +162,7 @@ class DesignSerializer(serializers.ModelSerializer):
     # pattern_id = serializers.PrimaryKeyRelatedField(source='pattern',  queryset=Pattern.objects.all())
     paper = PaperSerializer(read_only=False)
     # paper_id = serializers.PrimaryKeyRelatedField(source='paper',  queryset=Paper.objects.all())
+    design_elements = DesignElementSerializer(many=True)
 
     class Meta:
         model = Design
@@ -158,6 +175,7 @@ class DesignSerializer(serializers.ModelSerializer):
             # 'pattern_id',
             'paper',
             # 'paper_id',
+            'design_elements',
         )
 
 

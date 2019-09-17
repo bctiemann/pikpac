@@ -25,6 +25,13 @@ class DesignAdmin(admin.ModelAdmin):
 admin.site.register(models.Design, DesignAdmin)
 
 
+class DesignElementAdmin(admin.ModelAdmin):
+    list_display = ('id', 'design', 'type',)
+    list_filter = ()
+    readonly_fields = ()
+admin.site.register(models.DesignElement, DesignElementAdmin)
+
+
 class ProofAdmin(admin.ModelAdmin):
     list_display = ('id', 'project', 'date_created', 'created_by', 'proof_file',)
     list_filter = ()

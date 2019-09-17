@@ -187,6 +187,9 @@ class DesignViewSet(viewsets.ModelViewSet):
         design.pattern = pattern
         design.save()
 
+        for design_element in request.data['design_elements']:
+            print(design_element)
+
         return Response({})
 
     def create(self, request, *args, **kwargs):
