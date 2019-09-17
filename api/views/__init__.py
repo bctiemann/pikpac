@@ -190,10 +190,11 @@ class DesignViewSet(viewsets.ModelViewSet):
         for elem in request.data['design_elements']:
             print(elem)
             if elem['id']:
-                design_element = DesignElement.objects.get(pk=elem['id'])
-                # design_element
+                design_element = DesignElement.objects.filter(design=design, pk=elem['id'])
+                design_element.update(**elem)
             else:
                 design_element = DesignElement(**elem)
+                design_element.design = design
                 design_element.save()
             print(design_element)
 
