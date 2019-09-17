@@ -72,11 +72,13 @@ class DesignElement(models.Model):
 
     design = models.ForeignKey('orders.Design', null=True, blank=True, on_delete=models.CASCADE, related_name='design_elements')
     type = models.CharField(choices=TYPE_CHOICES, max_length=20, blank=True, default=TYPE_CHOICES[0][0])
-    width = models.IntegerField(null=True, blank=True, default=0)
-    height = models.IntegerField(null=True, blank=True, default=0)
-    left = models.IntegerField(null=True, blank=True, default=0)
-    top = models.IntegerField(null=True, blank=True, default=0)
-    angle = models.IntegerField(null=True, blank=True, default=0)
+    width = models.FloatField(null=True, blank=True, default=0)
+    height = models.FloatField(null=True, blank=True, default=0)
+    left = models.FloatField(null=True, blank=True, default=0)
+    top = models.FloatField(null=True, blank=True, default=0)
+    angle = models.FloatField(null=True, blank=True, default=0)
+    scaleX = models.FloatField(null=True, blank=True, default=0)
+    scaleY = models.FloatField(null=True, blank=True, default=0)
 
 
 class Order(models.Model):

@@ -19,7 +19,7 @@ from rest_framework.decorators import action
 
 from accounts.models import User, Address
 from products.models import ProductCategory, Product, ProductPrice, Pattern, Paper
-from orders.models import Project, Order, Design, TaxRate, ShippingOption
+from orders.models import Project, Order, Design, DesignElement, TaxRate, ShippingOption
 from faq.models import FaqCategory, FaqHeading, FaqItem
 from api import serializers, filters
 
@@ -187,7 +187,14 @@ class DesignViewSet(viewsets.ModelViewSet):
         design.pattern = pattern
         design.save()
 
-        for design_element in request.data['design_elements']:
+        for elem in request.data['design_elements']:
+            print(elem)
+            if elem['id']:
+                design_element = DesignElement.objects.get(pk=elem['id'])
+                # design_element
+            else:
+                design_element = DesignElement(**elem)
+                design_element.save()
             print(design_element)
 
         return Response({})
