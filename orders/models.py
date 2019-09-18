@@ -77,8 +77,8 @@ class DesignElement(models.Model):
     left = models.FloatField(null=True, blank=True, default=0)
     top = models.FloatField(null=True, blank=True, default=0)
     angle = models.FloatField(null=True, blank=True, default=0)
-    scaleX = models.FloatField(null=True, blank=True, default=0)
-    scaleY = models.FloatField(null=True, blank=True, default=0)
+    scale_x = models.FloatField(null=True, blank=True, default=0)
+    scale_y = models.FloatField(null=True, blank=True, default=0)
 
 
 class Order(models.Model):

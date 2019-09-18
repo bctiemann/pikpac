@@ -152,6 +152,8 @@ class DesignElementSerializer(serializers.ModelSerializer):
             'left',
             'top',
             'angle',
+            'scale_x',
+            'scale_y',
         )
 
 
