@@ -187,16 +187,21 @@ class DesignViewSet(viewsets.ModelViewSet):
         design.pattern = pattern
         design.save()
 
+        existing_element_ids = [d.id for d in design.design_elements.all()]
+        new_element_ids = []
         for elem in request.data['design_elements']:
             print(elem)
             if elem['id']:
-                design_element = DesignElement.objects.filter(design=design, pk=elem['id'])
-                design_element.update(**elem)
+                design_elements = DesignElement.objects.filter(design=design, pk=elem['id'])
+                design_elements.update(**elem)
+                design_element = design_elements.first()
             else:
                 design_element = DesignElement(**elem)
                 design_element.design = design
                 design_element.save()
-            print(design_element)
+            new_element_ids.append(design_element.id)
+        elements_to_delete = list(set(existing_element_ids) - set(new_element_ids))
+        DesignElement.objects.filter(pk__in=elements_to_delete).delete()
 
         return Response({})
 
